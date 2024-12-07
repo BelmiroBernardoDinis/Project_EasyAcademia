@@ -99,3 +99,19 @@ CREATE TABLE pagamentos (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
 );
 
+-- Tabela para controlar o acesso aos vídeos
+CREATE TABLE acesso_videos (
+    id_acesso INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_video INT NOT NULL,
+    data_acesso DATE NOT NULL DEFAULT CURRENT_DATE,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_video) REFERENCES videos(id_video) ON DELETE CASCADE
+);
+Como usar essa tabela
+Sempre que um pagamento for confirmado, adicione registros à tabela acesso_videos, associando o id_usuario aos vídeos comprados.
+Antes de permitir o acesso a um vídeo, consulte esta tabela para verificar se o usuário tem permissão.
+Validação no Backend
+No momento de autenticação para assistir a um vídeo:
+Solução 1: Verifique na tabela assinaturas se o usuário tem uma assinatura válida.
+Solução 2: Consulte a tabela acesso_videos para verificar se há permissão explícita para o vídeo solicitado.
